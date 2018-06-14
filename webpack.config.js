@@ -6,8 +6,6 @@ const BUILD_DIR = path.resolve(__dirname, 'public');
 // const PHASER_DIR = path.join(__dirname, '/node_modules/phaser');
 const { NODE_ENV } = process.env;
 
-console.log('NODE_ENV:', process.env.NODE_ENV);
-
 const config = {
   mode: NODE_ENV,
   entry: `${APP_DIR}/index.js`,
