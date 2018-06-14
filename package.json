@@ -22,6 +22,7 @@
     "eslint": "^4.18.2",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.9.0",
+    "gh-pages": "^1.2.0",
     "raw-loader": "^0.5.1",
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.10",
@@ -30,7 +31,7 @@
   "scripts": {
     "dev": "set NODE_ENV=development&& webpack-dev-server --hot --inline",
     "build": "set NODE_ENV=production&& webpack",
-    "deploy": "set NODE_ENV=production&& webpack && chmod +x ./deploy.sh && ./deploy.sh"
+    "deploy": "set NODE_ENV=production&& webpack && gh-pages -d public"
   },
   "dependencies": {
     "phaser": "^3.9.0",
