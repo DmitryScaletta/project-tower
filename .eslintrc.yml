@@ -1,0 +1,7 @@
+extends: airbnb-base
+env:
+  browser: true
+rules:
+  no-param-reassign: off
+  no-underscore-dangle: off
+  max-len: off

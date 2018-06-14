@@ -1,0 +1,39 @@
+{
+  "name": "project-tower",
+  "version": "0.0.1",
+  "description": "Project Tower",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DmitryScaletta/project-tower.git"
+  },
+  "author": {
+    "name": "DmitryScaletta",
+    "email": "dmitryscaletta@mail.ru",
+    "url": "https://github.com/DmitryScaletta"
+  },
+  "license": "MIT",
+  "homepage": "https://dmitryscaletta.github.io/project-tower/",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "eslint": "^4.18.2",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "raw-loader": "^0.5.1",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.10",
+    "webpack-dev-server": "^3.1.0"
+  },
+  "scripts": {
+    "dev": "set NODE_ENV=development&& webpack-dev-server --hot --inline",
+    "build": "set NODE_ENV=production&& webpack",
+    "deploy": "set NODE_ENV=production&& webpack && chmod +x ./deploy.sh && ./deploy.sh"
+  },
+  "dependencies": {
+    "phaser": "^3.9.0",
+    "webfontloader": "^1.6.28"
+  }
+}
