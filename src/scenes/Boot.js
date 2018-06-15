@@ -16,8 +16,8 @@ export default class extends Phaser.Scene {
     this.load.atlas('knight', 'enemy/knight.png', 'enemy/knight.json');
 
     this.load.image('hud-hp-label', 'images/hud-hp-label.png');
-    this.load.image('hud-hp-empty', 'images/hud-hp-empty.png');
-    this.load.image('hud-hp-full', 'images/hud-hp-full.png');
+    this.load.image('hud-hp-bottom', 'images/hud-hp-bottom.png');
+    this.load.image('hud-hp-top', 'images/hud-hp-top.png');
 
     this.fontsReady = false;
     this.fontsLoaded = this.fontsLoaded.bind(this);

@@ -1,46 +1,47 @@
-const getHpWidth = (playerHp, hp) => {
-  if (playerHp === 100) return hp.width;
+const getHpWidth = (hp) => {
+  const hpBarWidth = 200;
 
-  const border = 7;
-  let cutWidth = 0;
+  if (hp === 100) return hpBarWidth;
+  if (hp <= 0) return 0;
 
-  if (playerHp > 0) {
-    const width = hp.width - (border * 2);
-    cutWidth = Math.round((width * playerHp) / 100);
+  let finalWidth = Math.round((hpBarWidth * hp) / 100);
 
-    if (cutWidth < 1 && cutWidth > 0) {
-      cutWidth = 1;
-    }
-
-    cutWidth += border;
+  if (finalWidth < 1 && finalWidth > 0) {
+    finalWidth = 1;
   }
 
-  return cutWidth;
+  return finalWidth;
 };
 
+
 export function updatePlayerHp() {
-  const cutWidth = getHpWidth(this.player.data.hp, this.hp);
-  this.hp.frame.cutWidth = cutWidth;
-  this.hp.frame.updateUVs();
-  this.hp.setDisplaySize(cutWidth, this.hp.height);
+  const width = getHpWidth(this.player.data.hp);
+  this.hpMask.clear();
+  this.hpMask.fillStyle(0xf44336);
+  this.hpMask.fillRect(0, 0, width, 16);
 }
 
 export function createHud() {
   const HP_COORDS = { x: 65, y: 25 };
 
   const hpLabel = this.add.image(20, 25, 'hud-hp-label');
-  const hpBg = this.add.image(HP_COORDS.x, HP_COORDS.y, 'hud-hp-empty');
-  this.hp = this.add.image(HP_COORDS.x, HP_COORDS.y, 'hud-hp-full');
+  const hpBottom = this.add.image(HP_COORDS.x, HP_COORDS.y, 'hud-hp-bottom');
+  const hpTop = this.add.image(HP_COORDS.x, HP_COORDS.y, 'hud-hp-top');
 
   hpLabel
     .setScrollFactor(0, 0)
     .setOrigin(0, 0);
-  hpBg
+  hpBottom
     .setScrollFactor(0, 0)
     .setOrigin(0, 0);
-  this.hp
+  hpTop
+    .setDepth(1)
     .setScrollFactor(0, 0)
     .setOrigin(0, 0);
+
+  this.hpMask = this.add.graphics(0, 0)
+    .setScrollFactor(0, 0)
+    .setPosition(HP_COORDS.x + 7, HP_COORDS.y + 7);
 
   if (process.env.NODE_ENV === 'development') {
     this.coords = this.add.text(28, 76, '');
@@ -50,6 +51,7 @@ export function createHud() {
     this.coords.setFontSize(20);
   }
 }
+
 
 export function handleUpdateHud() {
   if (process.env.NODE_ENV === 'development') {
