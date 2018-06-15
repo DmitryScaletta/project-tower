@@ -22,6 +22,15 @@ export default class extends Phaser.Scene {
     this.fontsReady = false;
     this.fontsLoaded = this.fontsLoaded.bind(this);
 
+    const { config } = this.sys.game;
+    const halfWidth = config.width / 2;
+    const halfHeight = config.height / 2;
+
+    this.add.text(halfWidth, halfHeight, 'Loading...', {
+      fontFamily: 'Arial, sans-serif',
+      fontSize: 40,
+    }).setOrigin(0.5, 0.5);
+
     WebFont.load({
       google: {
         families: ['Neucha'],
