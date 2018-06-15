@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import { updatePlayerHp } from '../utils/hud';
 
 
 export function createKnight(_params = {}) {
@@ -71,7 +70,7 @@ export function handleUpdateKnight(knight) {
           const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, knight.x, knight.y);
           if (distance < 96) {
             this.player.data.hp -= knight.data.damage;
-            updatePlayerHp(this);
+            this.updatePlayerHp();
           }
         }, delay - 500);
 
