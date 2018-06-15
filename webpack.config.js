@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const path = require('path');
 
 const APP_DIR = path.resolve(__dirname, 'src');
@@ -36,12 +35,6 @@ const config = {
       },
     ],
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      CANVAS_RENDERER: true,
-      WEBGL_RENDERER: true,
-    }),
-  ],
   devServer: {
     contentBase: BUILD_DIR,
     port: 3000,
