@@ -18,19 +18,19 @@ const getHpWidth = (playerHp, hp) => {
   return cutWidth;
 };
 
-export const updatePlayerHp = (_this) => {
-  const cutWidth = getHpWidth(_this.player.data.hp, _this.hp);
-  _this.hp.frame.cutWidth = cutWidth;
-  _this.hp.frame.updateUVs();
-  _this.hp.setDisplaySize(cutWidth, _this.hp.height);
-};
+export function updatePlayerHp() {
+  const cutWidth = getHpWidth(this.player.data.hp, this.hp);
+  this.hp.frame.cutWidth = cutWidth;
+  this.hp.frame.updateUVs();
+  this.hp.setDisplaySize(cutWidth, this.hp.height);
+}
 
-export const createHud = (_this) => {
+export function createHud() {
   const HP_COORDS = { x: 65, y: 25 };
 
-  const hpLabel = _this.add.image(20, 25, 'hud-hp-label');
-  const hpBg = _this.add.image(HP_COORDS.x, HP_COORDS.y, 'hud-hp-empty');
-  _this.hp = _this.add.image(HP_COORDS.x, HP_COORDS.y, 'hud-hp-full');
+  const hpLabel = this.add.image(20, 25, 'hud-hp-label');
+  const hpBg = this.add.image(HP_COORDS.x, HP_COORDS.y, 'hud-hp-empty');
+  this.hp = this.add.image(HP_COORDS.x, HP_COORDS.y, 'hud-hp-full');
 
   hpLabel
     .setScrollFactor(0, 0)
@@ -38,22 +38,22 @@ export const createHud = (_this) => {
   hpBg
     .setScrollFactor(0, 0)
     .setOrigin(0, 0);
-  _this.hp
+  this.hp
     .setScrollFactor(0, 0)
     .setOrigin(0, 0);
 
   if (process.env.NODE_ENV === 'development') {
-    _this.coords = _this.add.text(28, 76, '');
-    _this.coords.setScrollFactor(0, 0);
-    _this.coords.setShadow(0, 0, 'rgba(0,0,0,0.8)', 5);
-    _this.coords.setFontStyle('bold');
-    _this.coords.setFontSize(20);
+    this.coords = this.add.text(28, 76, '');
+    this.coords.setScrollFactor(0, 0);
+    this.coords.setShadow(0, 0, 'rgba(0,0,0,0.8)', 5);
+    this.coords.setFontStyle('bold');
+    this.coords.setFontSize(20);
   }
-};
+}
 
-export const handleUpdateHud = (_this) => {
+export function handleUpdateHud() {
   if (process.env.NODE_ENV === 'development') {
-    const { x, y } = _this.player;
-    _this.coords.setText(`x: ${Math.round(x)}, y: ${Math.round(y)}`);
+    const { x, y } = this.player;
+    this.coords.setText(`x: ${Math.round(x)}, y: ${Math.round(y)}`);
   }
-};
+}

@@ -14,6 +14,19 @@ export default class extends Phaser.Scene {
 
 
   create() {
+    this.createHud = createHud.bind(this);
+    this.handleUpdateHud = handleUpdateHud.bind(this);
+    this.updatePlayerHp = updatePlayerHp.bind(this);
+    this.createPlayer = createPlayer.bind(this);
+    this.createPlayer = createPlayer.bind(this);
+    this.handleUpdatePlayer = handleUpdatePlayer.bind(this);
+    this.createPlayerAnimations = createPlayerAnimations.bind(this);
+    this.createKnight = createKnight.bind(this);
+    this.handleUpdateKnight = handleUpdateKnight.bind(this);
+    this.createKnightAnimations = createKnightAnimations.bind(this);
+
+
+    // map
     this.map = this.make.tilemap({ key: 'level1' });
 
     const tiles = this.map.addTilesetImage('tileset');
@@ -28,7 +41,7 @@ export default class extends Phaser.Scene {
 
 
     // player
-    this.player = createPlayer(this, {
+    this.player = this.createPlayer({
       startingPosition: { x: 100, y: 700 },
       hp: 100,
     });
@@ -37,11 +50,11 @@ export default class extends Phaser.Scene {
 
     // knights
     this.knights = this.add.group();
-    knights.forEach(params => this.knights.add(createKnight(this, params)));
+    knights.forEach(params => this.knights.add(this.createKnight(params)));
     this.physics.add.collider(this.groundLayer, this.knights);
 
-    createPlayerAnimations(this);
-    createKnightAnimations(this);
+    this.createPlayerAnimations();
+    this.createKnightAnimations();
 
 
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -51,17 +64,17 @@ export default class extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
     this.cameras.main.startFollow(this.player);
 
-    createHud(this);
-    updatePlayerHp(this);
+    this.createHud();
+    this.updatePlayerHp();
   }
 
 
   update() {
-    handleUpdatePlayer(this);
+    this.handleUpdatePlayer();
     this.knights.children.entries.forEach((knight) => {
-      handleUpdateKnight(this, knight);
+      this.handleUpdateKnight(knight);
     });
 
-    handleUpdateHud(this);
+    this.handleUpdateHud();
   }
 }
