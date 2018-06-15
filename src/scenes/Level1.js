@@ -10,9 +10,7 @@ export default class extends Phaser.Scene {
   }
 
 
-  preload() {
-    this.load.tilemapTiledJSON('level1', 'levels/level1.json');
-  }
+  // preload() {}
 
 
   create() {
@@ -32,7 +30,7 @@ export default class extends Phaser.Scene {
     // player
     this.player = createPlayer(this, {
       startingPosition: { x: 100, y: 700 },
-      hp: 98,
+      hp: 100,
     });
     this.physics.add.collider(this.groundLayer, this.player);
 

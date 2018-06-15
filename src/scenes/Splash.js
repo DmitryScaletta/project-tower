@@ -23,9 +23,7 @@ export default class extends Phaser.Scene {
   }
 
 
-  preload() {
-    this.load.tilemapTiledJSON('menu', 'levels/menu.json');
-  }
+  // preload() {}
 
 
   create() {
