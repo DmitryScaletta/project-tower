@@ -11,26 +11,19 @@ export default class extends Phaser.Scene {
 
 
   preload() {
-    this.load.tilemapTiledJSON('map', 'levels/level1.json');
-    this.load.spritesheet('tileset', 'tileset.png', { frameWidth: 64, frameHeight: 64 });
-    this.load.atlas('player', 'player/player.png', 'player/player.json');
-    this.load.atlas('knight', 'enemy/knight.png', 'enemy/knight.json');
-
-    this.load.image('hud-hp-label', 'images/hud-hp-label.png');
-    this.load.image('hud-hp-empty', 'images/hud-hp-empty.png');
-    this.load.image('hud-hp-full', 'images/hud-hp-full.png');
+    this.load.tilemapTiledJSON('level1', 'levels/level1.json');
   }
 
 
   create() {
-    this.map = this.make.tilemap({ key: 'map' });
+    this.map = this.make.tilemap({ key: 'level1' });
 
     const tiles = this.map.addTilesetImage('tileset');
-    this.cloudsLayer = this.map.createDynamicLayer('clouds', tiles, 0, 0);
+    this.cloudsLayer = this.map.createStaticLayer('clouds', tiles, 0, 0);
     this.groundLayer = this.map.createDynamicLayer('ground', tiles, 0, 0);
     this.groundLayer.setCollisionByExclusion([-1]);
-    this.buildingsLayer = this.map.createDynamicLayer('buildings', tiles, 0, 0);
-    this.decorationLayer = this.map.createDynamicLayer('decoration', tiles, 0, 0);
+    this.buildingsLayer = this.map.createStaticLayer('buildings', tiles, 0, 0);
+    this.decorationLayer = this.map.createStaticLayer('decoration', tiles, 0, 0);
 
     this.physics.world.bounds.width = this.groundLayer.width;
     this.physics.world.bounds.height = this.groundLayer.height;

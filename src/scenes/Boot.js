@@ -6,35 +6,34 @@ export default class extends Phaser.Scene {
     super({ key: 'BootScene' });
   }
 
-  preload() {
-    this.load.image('tiles', 'tilemaps/brick.png');
-    this.load.tilemapTiledJSON('map', 'tilemaps/map.json');
 
-    this.load.spritesheet('player', 'img/player.png', {
-      frameWidth: 24,
-      frameHeight: 26,
-    });
+  preload() {
+    this.load.spritesheet('tileset', 'tileset.png', { frameWidth: 64, frameHeight: 64 });
+    this.load.atlas('player', 'player/player.png', 'player/player.json');
+    this.load.atlas('knight', 'enemy/knight.png', 'enemy/knight.json');
+
+    this.load.image('hud-hp-label', 'images/hud-hp-label.png');
+    this.load.image('hud-hp-empty', 'images/hud-hp-empty.png');
+    this.load.image('hud-hp-full', 'images/hud-hp-full.png');
 
     this.fontsReady = false;
     this.fontsLoaded = this.fontsLoaded.bind(this);
-    // this.add.text(100, 100, 'loading fonts...');
-
-    // this.load.image('loaderBg', 'img/loader-bg.png');
-    // this.load.image('loaderBar', 'img/loader-bar.png');
 
     WebFont.load({
       google: {
-        families: ['Neucha:cyrillic,latin'],
+        families: ['Neucha'],
       },
       active: this.fontsLoaded,
     });
   }
+
 
   update() {
     if (this.fontsReady) {
       this.scene.start('SplashScene');
     }
   }
+
 
   fontsLoaded() {
     this.fontsReady = true;

@@ -2,15 +2,15 @@ import Phaser from 'phaser';
 
 import gameConfig from './config';
 
-// import BootScene from './scenes/Boot';
-// import SplashScene from './scenes/Splash';
+import BootScene from './scenes/Boot';
+import SplashScene from './scenes/Splash';
 import Level1 from './scenes/Level1';
 
 const config = {
   ...gameConfig,
   scene: [
-    // BootScene,
-    // SplashScene,
+    BootScene,
+    SplashScene,
     Level1,
   ],
 };
