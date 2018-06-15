@@ -43,7 +43,7 @@ export default class extends Phaser.Scene {
     // logo
     this.logo = this.add.text(halfWidth, halfHeight * 0.3, 'PROJECT TOWER', {
       fontSize: 120,
-      fontFamily: 'Neucha, sans-serif',
+      fontFamily: 'Neucha, Arial, sans-serif',
       fontStyle: 'bold',
       color: COLOR_MAIN,
     })
@@ -54,7 +54,7 @@ export default class extends Phaser.Scene {
     // back hint
     this.backHint = this.add.text(50, 50, 'ESC - Back', {
       fontSize: 30,
-      fontFamily: 'Neucha, sans-serif',
+      fontFamily: 'Neucha, Arial, sans-serif',
       fontStyle: 'bold',
       color: COLOR_WHITE,
     })
@@ -66,7 +66,7 @@ export default class extends Phaser.Scene {
     // info
     this.info = this.add.text(halfWidth, halfHeight * 0.9, '', {
       fontSize: 30,
-      fontFamily: 'Neucha, sans-serif',
+      fontFamily: 'Neucha, Arial, sans-serif',
       fontStyle: 'bold',
       color: COLOR_WHITE,
     })
@@ -84,7 +84,7 @@ export default class extends Phaser.Scene {
     const menu = menuItems.map((title) => {
       const item = this.add.text(115, offsetY, title, {
         fontSize: 60,
-        fontFamily: 'sans-serif',
+        fontFamily: 'Arial, sans-serif',
         fontStyle: 'bold',
         color: COLOR_WHITE,
       })
