@@ -1,4 +1,33 @@
 import Phaser from 'phaser';
+import createAnimations from '../utils/createAnimations';
+
+
+const animations = [
+  {
+    key: 'knight/idle',
+    prefix: 'idle_',
+    frameRate: 10,
+    repeat: -1,
+  },
+  {
+    key: 'knight/walk',
+    prefix: 'walk_',
+    frameRate: 10,
+    repeat: -1,
+  },
+  {
+    key: 'knight/attack',
+    prefix: 'attack_',
+    frameRate: 10,
+    repeat: -1,
+    repeatDelay: 300,
+  },
+  {
+    key: 'knight/dead',
+    prefix: 'die_',
+    frameRate: 10,
+  },
+];
 
 
 export function createKnight(_params = {}) {
@@ -23,8 +52,12 @@ export function createKnight(_params = {}) {
   knight.setBounce(0.01);
   knight.setCollideWorldBounds(true);
   knight.body.setSize(knight.width - 138, knight.height - 84); // 108x54
-  knight.data = params;
+  knight.userData = params;
 
+  if (!this._knightAnimationsCreated) {
+    createAnimations.call(this, animations, 'knight');
+    this._knightAnimationsCreated = true;
+  }
 
   return knight;
 }
@@ -33,11 +66,11 @@ export function createKnight(_params = {}) {
 export function handleUpdateKnight(knight) {
   if (!knight.active) return;
 
-  if (knight.data.hp <= 0) {
-    if (!knight.data._stopDeadAnimation) {
+  if (knight.userData.hp <= 0) {
+    if (!knight.userData._stopDeadAnimation) {
       knight.body.setVelocityX(0);
       knight.anims.play('knight/dead', true);
-      setTimeout(() => { knight.data._stopDeadAnimation = true; }, 500);
+      setTimeout(() => { knight.userData._stopDeadAnimation = true; }, 500);
       setTimeout(() => {
         knight.visible = false;
         knight.active = false;
@@ -50,7 +83,7 @@ export function handleUpdateKnight(knight) {
   const playerAndNpcOnOneHight = Math.abs(this.player.y - knight.y) < 192;
 
   if (
-    distanceBetweenPlayerAndNpc <= knight.data.viewDistance &&
+    distanceBetweenPlayerAndNpc <= knight.userData.viewDistance &&
     playerAndNpcOnOneHight
   ) {
     if (distanceBetweenPlayerAndNpc < 64) {
@@ -59,7 +92,7 @@ export function handleUpdateKnight(knight) {
         const REPEAT_DELAY = 300;
         const delay = ANIMATION_LENGTH + REPEAT_DELAY;
 
-        if (this.player.data.hp <= 0) {
+        if (this.player.userData.hp <= 0) {
           knight.anims.play('knight/idle', true);
           return;
         }
@@ -69,7 +102,7 @@ export function handleUpdateKnight(knight) {
         setTimeout(() => {
           const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, knight.x, knight.y);
           if (distance < 96) {
-            this.player.data.hp -= knight.data.damage;
+            this.player.userData.hp -= knight.userData.damage;
             this.updatePlayerHp();
           }
         }, delay - 500);
@@ -81,12 +114,12 @@ export function handleUpdateKnight(knight) {
       knight.anims.play('knight/attack', true);
     } else
     if (!knight.isAttacking && this.player.x < knight.x) {
-      knight.body.setVelocityX(-200 * knight.data.speed);
+      knight.body.setVelocityX(-200 * knight.userData.speed);
       knight.anims.play('knight/walk', true);
       knight.flipX = true;
     } else
     if (!knight.isAttacking && this.player.x > knight.x) {
-      knight.body.setVelocityX(200 * knight.data.speed);
+      knight.body.setVelocityX(200 * knight.userData.speed);
       knight.anims.play('knight/walk', true);
       knight.flipX = false;
     } else
@@ -97,51 +130,4 @@ export function handleUpdateKnight(knight) {
     knight.body.setVelocityX(0);
     knight.anims.play('knight/idle', true);
   }
-}
-
-
-export function createKnightAnimations() {
-  this.anims.create({
-    key: 'knight/idle',
-    frames: this.anims.generateFrameNames('knight', {
-      prefix: 'idle_',
-      start: 1,
-      end: 10,
-      zeroPad: 2,
-    }),
-    frameRate: 10,
-  });
-  this.anims.create({
-    key: 'knight/walk',
-    frames: this.anims.generateFrameNames('knight', {
-      prefix: 'walk_',
-      start: 1,
-      end: 10,
-      zeroPad: 2,
-    }),
-    frameRate: 10,
-    repeat: -1,
-  });
-  this.anims.create({
-    key: 'knight/attack',
-    frames: this.anims.generateFrameNames('knight', {
-      prefix: 'attack_',
-      start: 1,
-      end: 10,
-      zeroPad: 2,
-    }),
-    frameRate: 10,
-    repeat: -1,
-    repeatDelay: 300,
-  });
-  this.anims.create({
-    key: 'knight/dead',
-    frames: this.anims.generateFrameNames('knight', {
-      prefix: 'die_',
-      start: 1,
-      end: 10,
-      zeroPad: 2,
-    }),
-    frameRate: 10,
-  });
 }

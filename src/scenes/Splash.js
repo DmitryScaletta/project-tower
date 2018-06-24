@@ -1,14 +1,24 @@
 import Phaser from 'phaser';
+import createControls from '../utils/controls';
 
 const COLOR_MAIN = '#fdd835';
 const COLOR_WHITE = '#fff';
 const CONTROLS_TEXT =
-`LEFT - Move left
+`Keyboard:
+LEFT - Move left
 RIGHT - Move right
 UP - Jump
 X - Attack
 E - Use
-ESC - Pause`;
+ESC - Pause/Back
+
+Gamepad:
+LEFT - Move left
+RIGHT - Move right
+A - Jump
+X - Attack
+Y - Use
+B - Back`;
 const CREDITS_TEXT =
 `PROJECT TOWER
 
@@ -27,6 +37,8 @@ export default class extends Phaser.Scene {
 
 
   create() {
+    this.createControls = createControls.bind(this);
+
     const { config } = this.sys.game;
     const halfWidth = config.width / 2;
     const halfHeight = config.height / 2;
@@ -122,12 +134,7 @@ export default class extends Phaser.Scene {
 
     this.updateMenu();
 
-    this.keys = {
-      up: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
-      down: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
-      back: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC),
-      enter: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER),
-    };
+    this.createControls();
 
     this.delay = false;
     this.makeDelay = () => {
@@ -140,7 +147,7 @@ export default class extends Phaser.Scene {
   update() {
     if (this.delay) return;
 
-    if (!this.additionalPage && this.keys.enter.isDown) {
+    if (!this.additionalPage && this.controls.enter()) {
       switch (this.selectedItem) {
         case 0: this.onPlay(); break;
         case 1: this.onControls(); break;
@@ -150,14 +157,14 @@ export default class extends Phaser.Scene {
       this.makeDelay();
     }
 
-    if (this.additionalPage && this.keys.back.isDown) {
+    if (this.additionalPage && this.controls.back()) {
       this.toggleAdditionalPage();
       this.makeDelay();
     }
 
     if (
       !this.additionalPage &&
-      this.keys.up.isDown &&
+      this.controls.up() &&
       this.selectedItem !== 0
     ) {
       this.selectedItem -= 1;
@@ -167,7 +174,7 @@ export default class extends Phaser.Scene {
 
     if (
       !this.additionalPage &&
-      this.keys.down.isDown &&
+      this.controls.down() &&
       this.selectedItem !== this.menu.children.entries.length - 1
     ) {
       this.selectedItem += 1;

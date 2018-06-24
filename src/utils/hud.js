@@ -15,7 +15,7 @@ const getHpWidth = (hp) => {
 
 
 export function updatePlayerHp() {
-  const width = getHpWidth(this.player.data.hp);
+  const width = getHpWidth(this.player.userData.hp);
   this.hpMask.clear();
   this.hpMask.fillStyle(0xf44336);
   this.hpMask.fillRect(0, 0, width, 16);

@@ -1,8 +1,10 @@
 import Phaser from 'phaser';
 import { knights } from '../utils/level1';
 import { createHud, handleUpdateHud, updatePlayerHp } from '../utils/hud';
-import { createPlayer, handleUpdatePlayer, createPlayerAnimations } from '../characters/player';
-import { createKnight, handleUpdateKnight, createKnightAnimations } from '../characters/knight';
+import createControls from '../utils/controls';
+import createCamera from '../utils/camera';
+import { createPlayer, handleUpdatePlayer } from '../characters/player';
+import { createKnight, handleUpdateKnight } from '../characters/knight';
 
 export default class extends Phaser.Scene {
   constructor() {
@@ -10,20 +12,17 @@ export default class extends Phaser.Scene {
   }
 
 
-  // preload() {}
-
-
   create() {
     this.createHud = createHud.bind(this);
     this.handleUpdateHud = handleUpdateHud.bind(this);
     this.updatePlayerHp = updatePlayerHp.bind(this);
+    this.createControls = createControls.bind(this);
+    this.createCamera = createCamera.bind(this);
     this.createPlayer = createPlayer.bind(this);
     this.createPlayer = createPlayer.bind(this);
     this.handleUpdatePlayer = handleUpdatePlayer.bind(this);
-    this.createPlayerAnimations = createPlayerAnimations.bind(this);
     this.createKnight = createKnight.bind(this);
     this.handleUpdateKnight = handleUpdateKnight.bind(this);
-    this.createKnightAnimations = createKnightAnimations.bind(this);
 
 
     // map
@@ -53,18 +52,8 @@ export default class extends Phaser.Scene {
     knights.forEach(params => this.knights.add(this.createKnight(params)));
     this.physics.add.collider(this.groundLayer, this.knights);
 
-    this.createPlayerAnimations();
-    this.createKnightAnimations();
-
-
-    this.cursors = this.input.keyboard.createCursorKeys();
-    this.keys = {
-      fire: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X),
-    };
-    this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-    this.cameras.main.startFollow(this.player);
-    this.cameras.main.setFollowOffset(0, 40);
-
+    this.createControls();
+    this.createCamera();
     this.createHud();
     this.updatePlayerHp();
   }
