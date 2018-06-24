@@ -64,13 +64,25 @@ export function createKnight(_params = {}) {
 
 
 export function handleUpdateKnight(knight) {
+  const rand = (min, max) => Math.round((Math.random() * (max - min)) + min);
+
   if (!knight.active) return;
 
   if (knight.userData.hp <= 0) {
-    if (!knight.userData._stopDeadAnimation) {
+    if (
+      !knight.userData._startDeadAnimation &&
+      !knight.userData._stopDeadAnimation
+    ) {
+      knight.userData._startDeadAnimation = true;
       knight.body.setVelocityX(0);
       knight.anims.play('knight/dead', true);
-      setTimeout(() => { knight.userData._stopDeadAnimation = true; }, 500);
+      setTimeout(() => {
+        knight.userData._stopDeadAnimation = true;
+        // add flask for player with 20% chance
+        if (rand(0, 100) < 20) {
+          this.player.userData.flasks += 1;
+        }
+      }, 500);
       setTimeout(() => {
         knight.visible = false;
         knight.active = false;
@@ -103,7 +115,7 @@ export function handleUpdateKnight(knight) {
           const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, knight.x, knight.y);
           if (distance < 96) {
             this.player.userData.hp -= knight.userData.damage;
-            this.updatePlayerHp();
+            this.updatePlayerInfo();
           }
         }, delay - 500);
 

@@ -14,11 +14,13 @@ const getHpWidth = (hp) => {
 };
 
 
-export function updatePlayerHp() {
+export function updatePlayerInfo() {
   const width = getHpWidth(this.player.userData.hp);
   this.hpMask.clear();
   this.hpMask.fillStyle(0xf44336);
   this.hpMask.fillRect(0, 0, width, 16);
+
+  this.flasks.setText(`FLASKS: ${this.player.userData.flasks}`);
 }
 
 export function createHud() {
@@ -43,13 +45,25 @@ export function createHud() {
     .setScrollFactor(0, 0)
     .setPosition(HP_COORDS.x + 7, HP_COORDS.y + 7);
 
+  this.flasks = this.add.text(27, 70, '');
+  this.flasks.setScrollFactor(0, 0);
+  this.flasks.setShadow(0, 0, 'rgba(0,0,0,0.8)', 5);
+  this.flasks.setFontStyle('bold');
+  this.flasks.setFontSize(20);
+  this.flasks.setFontFamily('Arial, sans-serif');
+
   if (process.env.NODE_ENV === 'development') {
-    this.coords = this.add.text(28, 76, '');
+    this.coords = this.add.text(27, 110, '');
     this.coords.setScrollFactor(0, 0);
     this.coords.setShadow(0, 0, 'rgba(0,0,0,0.8)', 5);
     this.coords.setFontStyle('bold');
     this.coords.setFontSize(20);
   }
+
+  this.input.keyboard.on('keydown_ESC', () => {
+    global.currentLevel = this.scene.key;
+    this.scene.start('SplashScene');
+  });
 }
 
 

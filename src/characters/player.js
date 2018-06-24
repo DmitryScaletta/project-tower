@@ -46,6 +46,7 @@ export function createPlayer(_params) {
     hp: 100,
     damage: 25,
     speed: 1,
+    flasks: 3,
   };
   const params = { ...defaultParams, ..._params };
 
@@ -62,6 +63,21 @@ export function createPlayer(_params) {
     this._playerAnimationsCreated = true;
   }
 
+  this.input.keyboard.on('keydown_Q', () => {
+    if (
+      !this.player.userData.isAttacking &&
+      this.player.body.onFloor() &&
+      this.player.userData.flasks > 0
+    ) {
+      this.player.userData.flasks -= 1;
+      this.player.userData.hp += 25;
+      if (this.player.userData.hp > 100) {
+        this.player.userData.hp = 100;
+      }
+      this.updatePlayerInfo();
+    }
+  });
+
   return player;
 }
 
@@ -71,8 +87,17 @@ export function handleUpdatePlayer() {
     if (!this.player.userData._stopDeadAnimation) {
       this.player.body.setVelocityX(0);
       this.player.anims.play('dead', true);
-      setTimeout(() => { this.player.userData._stopDeadAnimation = true; }, 500);
+      setTimeout(() => {
+        this.player.userData._stopDeadAnimation = true;
+      }, 500);
+    } else
+    if (!this._toMainMenu) {
+      setTimeout(() => {
+        global.location.reload();
+      }, 1000);
+      this._toMainMenu = true;
     }
+
     return;
   }
 

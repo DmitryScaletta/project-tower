@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 // import { knights } from '../utils/level2';
-import { createHud, handleUpdateHud, updatePlayerHp } from '../utils/hud';
+import { createHud, handleUpdateHud, updatePlayerInfo } from '../utils/hud';
 import createControls from '../utils/controls';
 import createCamera from '../utils/camera';
 import { createPlayer, handleUpdatePlayer } from '../characters/player';
@@ -15,7 +15,7 @@ export default class extends Phaser.Scene {
   create() {
     this.createHud = createHud.bind(this);
     this.handleUpdateHud = handleUpdateHud.bind(this);
-    this.updatePlayerHp = updatePlayerHp.bind(this);
+    this.updatePlayerInfo = updatePlayerInfo.bind(this);
     this.createControls = createControls.bind(this);
     this.createCamera = createCamera.bind(this);
     this.createPlayer = createPlayer.bind(this);
@@ -29,32 +29,45 @@ export default class extends Phaser.Scene {
     this.map = this.make.tilemap({ key: 'level2' });
 
     const tiles = this.map.addTilesetImage('tileset');
-    this.background1Layer = this.map.createStaticLayer('background', tiles, 0, 0);
-    this.ground1Layer = this.map.createDynamicLayer('ground', tiles, 0, 0);
-    this.ground1Layer.setCollisionByExclusion([-1]);
-    this.decoration1Layer = this.map.createStaticLayer('decoration', tiles, 0, 0);
+    this.backgroundLayer = this.map.createStaticLayer('background', tiles, 0, 0);
+    this.groundLayer = this.map.createDynamicLayer('ground', tiles, 0, 0);
+    this.groundLayer.setCollisionByExclusion([-1]);
+    this.decorationLayer = this.map.createStaticLayer('decoration', tiles, 0, 0);
 
-    this.physics.world.bounds.width = this.ground1Layer.width;
-    this.physics.world.bounds.height = this.ground1Layer.height;
+    this.physics.world.bounds.width = this.groundLayer.width;
+    this.physics.world.bounds.height = this.groundLayer.height;
 
 
     // player
     this.player = this.createPlayer({
-      startingPosition: { x: 650, y: 2700 },
+      // startingPosition: { x: 650, y: 2700 },
+      startingPosition: { x: 550, y: 2700 },
       hp: 100,
     });
-    this.physics.add.collider(this.ground1Layer, this.player);
+    this.physics.add.collider(this.groundLayer, this.player);
 
 
     // knights
     this.knights = this.add.group();
     // knights.forEach(params => this.knights.add(this.createKnight(params)));
-    this.physics.add.collider(this.ground1Layer, this.knights);
+    this.physics.add.collider(this.groundLayer, this.knights);
 
     this.createControls();
     this.createCamera();
     this.createHud();
-    this.updatePlayerHp();
+    this.updatePlayerInfo();
+
+    this.input.keyboard.on('keydown_E', () => {
+      if (
+        this.player.x > 500 &&
+        this.player.x < 600 &&
+        this.player.y > 2700 &&
+        this.player.y < 2800
+      ) {
+        console.log('to level 1');
+        this.scene.switch('Level1');
+      }
+    });
   }
 
 
@@ -65,11 +78,5 @@ export default class extends Phaser.Scene {
     });
 
     this.handleUpdateHud();
-
-    if (
-      this.controls.action()
-    ) {
-      this.scene.start('Level1');
-    }
   }
 }

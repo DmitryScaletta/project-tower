@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { knights } from '../utils/level1';
-import { createHud, handleUpdateHud, updatePlayerHp } from '../utils/hud';
+import { createHud, handleUpdateHud, updatePlayerInfo } from '../utils/hud';
 import createControls from '../utils/controls';
 import createCamera from '../utils/camera';
 import { createPlayer, handleUpdatePlayer } from '../characters/player';
@@ -15,7 +15,7 @@ export default class extends Phaser.Scene {
   create() {
     this.createHud = createHud.bind(this);
     this.handleUpdateHud = handleUpdateHud.bind(this);
-    this.updatePlayerHp = updatePlayerHp.bind(this);
+    this.updatePlayerInfo = updatePlayerInfo.bind(this);
     this.createControls = createControls.bind(this);
     this.createCamera = createCamera.bind(this);
     this.createPlayer = createPlayer.bind(this);
@@ -55,7 +55,19 @@ export default class extends Phaser.Scene {
     this.createControls();
     this.createCamera();
     this.createHud();
-    this.updatePlayerHp();
+    this.updatePlayerInfo();
+
+    this.input.keyboard.on('keydown_E', () => {
+      if (
+        this.player.x > 295 &&
+        this.player.x < 320 &&
+        this.player.y > 2600 &&
+        this.player.y < 2700
+      ) {
+        console.log('to level 2');
+        this.scene.switch('Level2');
+      }
+    });
   }
 
 
@@ -66,15 +78,5 @@ export default class extends Phaser.Scene {
     });
 
     this.handleUpdateHud();
-
-    if (
-      this.controls.action() &&
-      this.player.x > 295 &&
-      this.player.x < 320 &&
-      this.player.y > 2600 &&
-      this.player.y < 2700
-    ) {
-      this.scene.start('Level2');
-    }
   }
 }

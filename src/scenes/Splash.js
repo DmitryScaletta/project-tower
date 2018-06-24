@@ -9,6 +9,7 @@ LEFT - Move left
 RIGHT - Move right
 UP - Jump
 X - Attack
+Q - Heal
 E - Use
 ESC - Pause/Back
 
@@ -17,6 +18,7 @@ LEFT - Move left
 RIGHT - Move right
 A - Jump
 X - Attack
+R1 - Heal
 Y - Use
 B - Back`;
 const CREDITS_TEXT =
@@ -31,9 +33,6 @@ export default class extends Phaser.Scene {
   constructor() {
     super({ key: 'SplashScene' });
   }
-
-
-  // preload() {}
 
 
   create() {
@@ -122,7 +121,9 @@ export default class extends Phaser.Scene {
       this.menu.toggleVisible();
     };
 
-    this.onPlay = () => this.scene.start('Level1');
+    this.onPlay = () => {
+      this.scene.switch(global.currentLevel || 'Level1');
+    };
     this.onControls = () => {
       this.toggleAdditionalPage();
       this.info.setText(CONTROLS_TEXT);
@@ -133,54 +134,37 @@ export default class extends Phaser.Scene {
     };
 
     this.updateMenu();
-
     this.createControls();
 
-    this.delay = false;
-    this.makeDelay = () => {
-      this.delay = true;
-      setTimeout(() => { this.delay = false; }, 200);
-    };
-  }
 
+    this.input.keyboard.on('keydown_ENTER', () => {
+      if (this.additionalPage) return;
 
-  update() {
-    if (this.delay) return;
-
-    if (!this.additionalPage && this.controls.enter()) {
       switch (this.selectedItem) {
         case 0: this.onPlay(); break;
         case 1: this.onControls(); break;
         case 2: this.onCredits(); break;
         default: break;
       }
-      this.makeDelay();
-    }
+    });
 
-    if (this.additionalPage && this.controls.back()) {
-      this.toggleAdditionalPage();
-      this.makeDelay();
-    }
+    this.input.keyboard.on('keydown_ESC', () => {
+      if (this.additionalPage) {
+        this.toggleAdditionalPage();
+      }
+    });
 
-    if (
-      !this.additionalPage &&
-      this.controls.up() &&
-      this.selectedItem !== 0
-    ) {
+    this.input.keyboard.on('keydown_UP', () => {
+      if (this.additionalPage || this.selectedItem === 0) return;
       this.selectedItem -= 1;
       this.updateMenu();
-      this.makeDelay();
-    }
+    });
 
-    if (
-      !this.additionalPage &&
-      this.controls.down() &&
-      this.selectedItem !== this.menu.children.entries.length - 1
-    ) {
+    this.input.keyboard.on('keydown_DOWN', () => {
+      if (this.additionalPage || this.selectedItem === this.menu.children.entries.length - 1) return;
       this.selectedItem += 1;
       this.updateMenu();
-      this.makeDelay();
-    }
+    });
   }
 
 
