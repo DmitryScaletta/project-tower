@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { knights } from '../utils/level1';
+// import { knights } from '../utils/level2';
 import { createHud, handleUpdateHud, updatePlayerHp } from '../utils/hud';
 import createControls from '../utils/controls';
 import createCamera from '../utils/camera';
@@ -8,7 +8,7 @@ import { createKnight, handleUpdateKnight } from '../characters/knight';
 
 export default class extends Phaser.Scene {
   constructor() {
-    super({ key: 'Level1' });
+    super({ key: 'Level2' });
   }
 
 
@@ -26,31 +26,30 @@ export default class extends Phaser.Scene {
 
 
     // map
-    this.map = this.make.tilemap({ key: 'level1' });
+    this.map = this.make.tilemap({ key: 'level2' });
 
     const tiles = this.map.addTilesetImage('tileset');
-    this.cloudsLayer = this.map.createStaticLayer('clouds', tiles, 0, 0);
-    this.groundLayer = this.map.createDynamicLayer('ground', tiles, 0, 0);
-    this.groundLayer.setCollisionByExclusion([-1]);
-    this.buildingsLayer = this.map.createStaticLayer('buildings', tiles, 0, 0);
-    this.decorationLayer = this.map.createStaticLayer('decoration', tiles, 0, 0);
+    this.background1Layer = this.map.createStaticLayer('background', tiles, 0, 0);
+    this.ground1Layer = this.map.createDynamicLayer('ground', tiles, 0, 0);
+    this.ground1Layer.setCollisionByExclusion([-1]);
+    this.decoration1Layer = this.map.createStaticLayer('decoration', tiles, 0, 0);
 
-    this.physics.world.bounds.width = this.groundLayer.width;
-    this.physics.world.bounds.height = this.groundLayer.height;
+    this.physics.world.bounds.width = this.ground1Layer.width;
+    this.physics.world.bounds.height = this.ground1Layer.height;
 
 
     // player
     this.player = this.createPlayer({
-      startingPosition: { x: 100, y: 700 },
+      startingPosition: { x: 650, y: 2700 },
       hp: 100,
     });
-    this.physics.add.collider(this.groundLayer, this.player);
+    this.physics.add.collider(this.ground1Layer, this.player);
 
 
     // knights
     this.knights = this.add.group();
-    knights.forEach(params => this.knights.add(this.createKnight(params)));
-    this.physics.add.collider(this.groundLayer, this.knights);
+    // knights.forEach(params => this.knights.add(this.createKnight(params)));
+    this.physics.add.collider(this.ground1Layer, this.knights);
 
     this.createControls();
     this.createCamera();
@@ -68,13 +67,9 @@ export default class extends Phaser.Scene {
     this.handleUpdateHud();
 
     if (
-      this.controls.action() &&
-      this.player.x > 295 &&
-      this.player.x < 320 &&
-      this.player.y > 2600 &&
-      this.player.y < 2700
+      this.controls.action()
     ) {
-      this.scene.start('Level2');
+      this.scene.start('Level1');
     }
   }
 }

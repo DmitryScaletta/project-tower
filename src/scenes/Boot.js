@@ -10,6 +10,7 @@ export default class extends Phaser.Scene {
   preload() {
     this.load.tilemapTiledJSON('menu', 'levels/menu.json');
     this.load.tilemapTiledJSON('level1', 'levels/level1.json');
+    this.load.tilemapTiledJSON('level2', 'levels/level2.json');
 
     this.load.spritesheet('tileset', 'images/tileset.png', { frameWidth: 64, frameHeight: 64 });
     this.load.atlas('player', 'player/player.png', 'player/player.json');

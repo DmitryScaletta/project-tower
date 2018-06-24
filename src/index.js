@@ -5,6 +5,7 @@ import gameConfig from './config';
 import BootScene from './scenes/Boot';
 import SplashScene from './scenes/Splash';
 import Level1 from './scenes/Level1';
+import Level2 from './scenes/Level2';
 
 const config = {
   ...gameConfig,
@@ -12,6 +13,7 @@ const config = {
     BootScene,
     SplashScene,
     Level1,
+    Level2,
   ],
 };
 
