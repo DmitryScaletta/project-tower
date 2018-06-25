@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
-import { knights } from '../utils/level1';
-import { createHud, handleUpdateHud, updatePlayerInfo } from '../utils/hud';
-import createControls from '../utils/controls';
-import createCamera from '../utils/camera';
+import { knights } from '../helpers/level1';
+import { createHud, handleUpdateHud, updatePlayerInfo } from '../helpers/hud';
+import createControls from '../helpers/controls';
+import createCamera from '../helpers/camera';
 import { createPlayer, handleUpdatePlayer } from '../characters/player';
 import { createKnight, handleUpdateKnight } from '../characters/knight';
 
@@ -57,15 +57,21 @@ export default class extends Phaser.Scene {
     this.createHud();
     this.updatePlayerInfo();
 
-    this.input.keyboard.on('keydown_E', () => {
+    const goToLevel2 = () => {
       if (
         this.player.x > 295 &&
         this.player.x < 320 &&
         this.player.y > 2600 &&
         this.player.y < 2700
       ) {
-        console.log('to level 2');
         this.scene.switch('Level2');
+      }
+    };
+
+    this.input.keyboard.on('keydown_E', goToLevel2);
+    this.input.gamepad.on('down', (pad, button) => {
+      if (button.index === Phaser.Input.Gamepad.Configs.XBOX_360.Y) {
+        goToLevel2();
       }
     });
   }

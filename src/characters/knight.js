@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import createAnimations from '../utils/createAnimations';
+import createAnimations from '../helpers/createAnimations';
 
 
 const animations = [

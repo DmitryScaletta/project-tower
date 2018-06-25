@@ -1,3 +1,6 @@
+import Phaser from 'phaser';
+
+
 const getHpWidth = (hp) => {
   const hpBarWidth = 200;
 
@@ -60,9 +63,16 @@ export function createHud() {
     this.coords.setFontSize(20);
   }
 
-  this.input.keyboard.on('keydown_ESC', () => {
+  const pause = () => {
     global.currentLevel = this.scene.key;
     this.scene.start('SplashScene');
+  };
+
+  this.input.keyboard.on('keydown_ESC', pause);
+  this.input.gamepad.on('down', (pad, button) => {
+    if (button.index === Phaser.Input.Gamepad.Configs.XBOX_360.START) {
+      pause();
+    }
   });
 }
 

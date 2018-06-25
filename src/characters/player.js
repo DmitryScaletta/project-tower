@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import createAnimations from '../utils/createAnimations';
+import createAnimations from '../helpers/createAnimations';
 
 const animations = [
   {
@@ -63,7 +63,8 @@ export function createPlayer(_params) {
     this._playerAnimationsCreated = true;
   }
 
-  this.input.keyboard.on('keydown_Q', () => {
+
+  const heal = () => {
     if (
       !this.player.userData.isAttacking &&
       this.player.body.onFloor() &&
@@ -75,6 +76,13 @@ export function createPlayer(_params) {
         this.player.userData.hp = 100;
       }
       this.updatePlayerInfo();
+    }
+  };
+
+  this.input.keyboard.on('keydown_Q', heal);
+  this.input.gamepad.on('down', (pad, button) => {
+    if (button.index === Phaser.Input.Gamepad.Configs.XBOX_360.RB) {
+      heal();
     }
   });
 
@@ -101,7 +109,7 @@ export function handleUpdatePlayer() {
     return;
   }
 
-  if (this.controls.fire() && this.player.body.onFloor()) {
+  if (this.controls.fire() && this.player.body && this.player.body.onFloor()) {
     if (!this.player.userData.isAttacking) {
       this.player.userData.isAttacking = true;
       setTimeout(() => {
@@ -124,26 +132,26 @@ export function handleUpdatePlayer() {
 
   if (this.controls.left()) {
     this.player.body.setVelocityX(-200 * this.player.userData.speed);
-    if (this.player.body.onFloor()) {
+    if (this.player.body && this.player.body.onFloor()) {
       this.player.anims.play('walk', true);
     }
     this.player.flipX = true;
   } else
   if (this.controls.right()) {
     this.player.body.setVelocityX(200 * this.player.userData.speed);
-    if (this.player.body.onFloor()) {
+    if (this.player.body && this.player.body.onFloor()) {
       this.player.anims.play('walk', true);
     }
     this.player.flipX = false;
   } else
-  if (this.player.body.onFloor() && !this.controls.fire()) {
+  if (this.player.body && this.player.body.onFloor() && !this.controls.fire()) {
     this.player.body.setVelocityX(0);
     this.player.anims.play('idle', true);
   }
-  if (this.controls.jump() && this.player.body.onFloor()) {
+  if (this.controls.jump() && this.player.body && this.player.body.onFloor()) {
     this.player.body.setVelocityY(-700);
   }
-  if (!this.player.body.onFloor()) {
+  if (this.player.body && !this.player.body.onFloor()) {
     this.player.anims.play('jump', true);
   }
 }

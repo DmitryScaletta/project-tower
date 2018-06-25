@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
-// import { knights } from '../utils/level2';
-import { createHud, handleUpdateHud, updatePlayerInfo } from '../utils/hud';
-import createControls from '../utils/controls';
-import createCamera from '../utils/camera';
+import { knights } from '../helpers/level2';
+import { createHud, handleUpdateHud, updatePlayerInfo } from '../helpers/hud';
+import createControls from '../helpers/controls';
+import createCamera from '../helpers/camera';
 import { createPlayer, handleUpdatePlayer } from '../characters/player';
 import { createKnight, handleUpdateKnight } from '../characters/knight';
 
@@ -40,7 +40,6 @@ export default class extends Phaser.Scene {
 
     // player
     this.player = this.createPlayer({
-      // startingPosition: { x: 650, y: 2700 },
       startingPosition: { x: 550, y: 2700 },
       hp: 100,
     });
@@ -49,7 +48,7 @@ export default class extends Phaser.Scene {
 
     // knights
     this.knights = this.add.group();
-    // knights.forEach(params => this.knights.add(this.createKnight(params)));
+    knights.forEach(params => this.knights.add(this.createKnight(params)));
     this.physics.add.collider(this.groundLayer, this.knights);
 
     this.createControls();
@@ -57,15 +56,21 @@ export default class extends Phaser.Scene {
     this.createHud();
     this.updatePlayerInfo();
 
-    this.input.keyboard.on('keydown_E', () => {
+    const goToLevel1 = () => {
       if (
         this.player.x > 500 &&
         this.player.x < 600 &&
         this.player.y > 2700 &&
         this.player.y < 2800
       ) {
-        console.log('to level 1');
         this.scene.switch('Level1');
+      }
+    };
+
+    this.input.keyboard.on('keydown_E', goToLevel1);
+    this.input.gamepad.on('down', (pad, button) => {
+      if (button.index === Phaser.Input.Gamepad.Configs.XBOX_360.Y) {
+        goToLevel1();
       }
     });
   }

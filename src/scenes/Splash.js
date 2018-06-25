@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import createControls from '../utils/controls';
+import createControls from '../helpers/controls';
 
 const COLOR_MAIN = '#fdd835';
 const COLOR_WHITE = '#fff';
@@ -18,9 +18,10 @@ LEFT - Move left
 RIGHT - Move right
 A - Jump
 X - Attack
-R1 - Heal
+RB - Heal
 Y - Use
-B - Back`;
+B - Back
+START - Pause`;
 const CREDITS_TEXT =
 `PROJECT TOWER
 
@@ -76,7 +77,7 @@ export default class extends Phaser.Scene {
 
     // info
     this.info = this.add.text(halfWidth, halfHeight * 0.9, '', {
-      fontSize: 30,
+      fontSize: 26,
       fontFamily: 'Neucha, Arial, sans-serif',
       fontStyle: 'bold',
       color: COLOR_WHITE,
@@ -122,7 +123,7 @@ export default class extends Phaser.Scene {
     };
 
     this.onPlay = () => {
-      this.scene.switch(global.currentLevel || 'Level1');
+      this.scene.start(global.currentLevel || 'Level1');
     };
     this.onControls = () => {
       this.toggleAdditionalPage();
@@ -136,8 +137,7 @@ export default class extends Phaser.Scene {
     this.updateMenu();
     this.createControls();
 
-
-    this.input.keyboard.on('keydown_ENTER', () => {
+    const onSelect = () => {
       if (this.additionalPage) return;
 
       switch (this.selectedItem) {
@@ -146,24 +146,41 @@ export default class extends Phaser.Scene {
         case 2: this.onCredits(); break;
         default: break;
       }
-    });
-
-    this.input.keyboard.on('keydown_ESC', () => {
+    };
+    const onBack = () => {
       if (this.additionalPage) {
         this.toggleAdditionalPage();
       }
-    });
-
-    this.input.keyboard.on('keydown_UP', () => {
+    };
+    const onUp = () => {
       if (this.additionalPage || this.selectedItem === 0) return;
       this.selectedItem -= 1;
       this.updateMenu();
-    });
-
-    this.input.keyboard.on('keydown_DOWN', () => {
+    };
+    const onDown = () => {
       if (this.additionalPage || this.selectedItem === this.menu.children.entries.length - 1) return;
       this.selectedItem += 1;
       this.updateMenu();
+    };
+
+    this.input.keyboard.on('keydown_ENTER', onSelect);
+    this.input.keyboard.on('keydown_ESC', onBack);
+    this.input.keyboard.on('keydown_UP', onUp);
+    this.input.keyboard.on('keydown_DOWN', onDown);
+
+    this.input.gamepad.on('down', (pad, button) => {
+      if (button.index === Phaser.Input.Gamepad.Configs.XBOX_360.A) {
+        onSelect();
+      } else
+      if (button.index === Phaser.Input.Gamepad.Configs.XBOX_360.B) {
+        onBack();
+      } else
+      if (button.index === Phaser.Input.Gamepad.Configs.XBOX_360.UP) {
+        onUp();
+      } else
+      if (button.index === Phaser.Input.Gamepad.Configs.XBOX_360.DOWN) {
+        onDown();
+      }
     });
   }
 
