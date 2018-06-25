@@ -59,8 +59,8 @@ export default class extends Phaser.Scene {
 
     const goToLevel2 = () => {
       if (
-        this.player.x > 295 &&
-        this.player.x < 320 &&
+        this.player.x > 250 &&
+        this.player.x < 330 &&
         this.player.y > 2600 &&
         this.player.y < 2700
       ) {
