@@ -18,12 +18,12 @@ const getHpWidth = (hp) => {
 
 
 export function updatePlayerInfo() {
-  const width = getHpWidth(this.player.userData.hp);
+  const width = getHpWidth(global.player.hp);
   this.hpMask.clear();
   this.hpMask.fillStyle(0xf44336);
   this.hpMask.fillRect(0, 0, width, 16);
 
-  this.flasks.setText(`FLASKS: ${this.player.userData.flasks}`);
+  this.flasks.setText(`FLASKS: ${global.player.flasks}`);
 }
 
 export function createHud() {

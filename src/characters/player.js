@@ -50,13 +50,18 @@ export function createPlayer(_params) {
   };
   const params = { ...defaultParams, ..._params };
 
+  if (global.player) {
+    params.hp = global.player.hp;
+    params.flasks = global.player.flasks;
+  }
+
   const player = this.physics.add.sprite(params.startingPosition.x, params.startingPosition.y, 'player');
 
   player.setBounce(0.01);
   player.setCollideWorldBounds(true);
   player.setDepth(1);
   player.body.setSize(player.width - 45, player.height - 21);
-  player.userData = params;
+  global.player = params;
 
   if (!this._playerAnimationsCreated) {
     createAnimations.call(this, animations, 'player');
@@ -66,14 +71,14 @@ export function createPlayer(_params) {
 
   const heal = () => {
     if (
-      !this.player.userData.isAttacking &&
+      !global.player.isAttacking &&
       this.player.body.onFloor() &&
-      this.player.userData.flasks > 0
+      global.player.flasks > 0
     ) {
-      this.player.userData.flasks -= 1;
-      this.player.userData.hp += 25;
-      if (this.player.userData.hp > 100) {
-        this.player.userData.hp = 100;
+      global.player.flasks -= 1;
+      global.player.hp += 25;
+      if (global.player.hp > 100) {
+        global.player.hp = 100;
       }
       this.updatePlayerInfo();
     }
@@ -91,12 +96,12 @@ export function createPlayer(_params) {
 
 
 export function handleUpdatePlayer() {
-  if (this.player.userData.hp <= 0) {
-    if (!this.player.userData._stopDeadAnimation) {
+  if (global.player.hp <= 0) {
+    if (!global.player._stopDeadAnimation) {
       this.player.body.setVelocityX(0);
       this.player.anims.play('dead', true);
       setTimeout(() => {
-        this.player.userData._stopDeadAnimation = true;
+        global.player._stopDeadAnimation = true;
       }, 500);
     } else
     if (!this._toMainMenu) {
@@ -110,35 +115,35 @@ export function handleUpdatePlayer() {
   }
 
   if (this.controls.fire() && this.player.body && this.player.body.onFloor()) {
-    if (!this.player.userData.isAttacking) {
-      this.player.userData.isAttacking = true;
+    if (!global.player.isAttacking) {
+      global.player.isAttacking = true;
       setTimeout(() => {
         this.knights.children.entries.forEach((knight) => {
           if (
             knight.active &&
             Phaser.Math.Distance.Between(this.player.x, this.player.y, knight.x, knight.y) < 96
           ) {
-            knight.userData.hp -= this.player.userData.damage;
+            knight.userData.hp -= global.player.damage;
           }
         });
-        this.player.userData.isAttacking = false;
+        global.player.isAttacking = false;
       }, 500);
     }
     this.player.anims.play('attack', true);
     this.player.body.setVelocityX(0);
   }
 
-  if (this.player.userData.isAttacking) return;
+  if (global.player.isAttacking) return;
 
   if (this.controls.left()) {
-    this.player.body.setVelocityX(-200 * this.player.userData.speed);
+    this.player.body.setVelocityX(-200 * global.player.speed);
     if (this.player.body && this.player.body.onFloor()) {
       this.player.anims.play('walk', true);
     }
     this.player.flipX = true;
   } else
   if (this.controls.right()) {
-    this.player.body.setVelocityX(200 * this.player.userData.speed);
+    this.player.body.setVelocityX(200 * global.player.speed);
     if (this.player.body && this.player.body.onFloor()) {
       this.player.anims.play('walk', true);
     }

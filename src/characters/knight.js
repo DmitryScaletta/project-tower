@@ -80,7 +80,7 @@ export function handleUpdateKnight(knight) {
         knight.userData._stopDeadAnimation = true;
         // add flask for player with 20% chance
         if (rand(0, 100) < 20) {
-          this.player.userData.flasks += 1;
+          global.player.flasks += 1;
         }
       }, 500);
       setTimeout(() => {
@@ -104,7 +104,7 @@ export function handleUpdateKnight(knight) {
         const REPEAT_DELAY = 300;
         const delay = ANIMATION_LENGTH + REPEAT_DELAY;
 
-        if (this.player.userData.hp <= 0) {
+        if (global.player.hp <= 0) {
           knight.anims.play('knight/idle', true);
           return;
         }
@@ -114,7 +114,7 @@ export function handleUpdateKnight(knight) {
         setTimeout(() => {
           const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, knight.x, knight.y);
           if (distance < 96) {
-            this.player.userData.hp -= knight.userData.damage;
+            global.player.hp -= knight.userData.damage;
             this.updatePlayerInfo();
           }
         }, delay - 500);

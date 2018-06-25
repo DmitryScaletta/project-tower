@@ -65,6 +65,7 @@ export default class extends Phaser.Scene {
         this.player.y < 2700
       ) {
         this.scene.switch('Level2');
+        this.updatePlayerInfo();
       }
     };
 
